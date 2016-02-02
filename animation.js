@@ -137,13 +137,8 @@ var Bug = function (initialX, color) {
 					y--;
 				}
 			}
-<<<<<<< HEAD
 			drawBug(x, y, color, 1);
 			gameContext.restore();
-=======
-
-			drawBug(x, y, color);
->>>>>>> 40202c7ebbb29cb65427ef8798195f0ff471c7d0
 
 			if (closestFood.isHit(x, y)) {
 				closestFood.exist = false;
