@@ -1,6 +1,23 @@
-<!DOCTYPE>
-<head>
-	<title>TAP BUG</title>
-</head>
-<body>
-</body>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>TAP BUG</title>
+		<link rel="stylesheet" type="text/css" href="style.css"></link>
+		<script src="index.js"></script>
+
+	</head>
+	<body>
+		<div>
+			<button onclick="showPage1()">page1</button>
+			<button onclick="showPage2()">Page2</button>
+			<hr>
+		</div>
+		<div>
+			<h3 id="level1">Page1</h3>
+			<h3 id="level2" style="display:none;">Page2</h3>
+			<canvas id="canvas" class="canvas"></canvas>
+		</div>
+		<script src="canvas.js"></script>
+		<script src="bug.js"></script>
+	</body>
+</html>
