@@ -25,12 +25,7 @@ function startGame(selectLevel) {
 		score2 = 0;
 	}
 
-	infoCanvas = document.getElementById("infoCanvas");
-	infoContext = infoCanvas.getContext("2d");
-	infoCanvas.width = 400;
-	infoCanvas.height = 50;
-	//infoContext.fillStyle = "#0A2A0A";
-	//infoContext.fillRect(0,0,infoCanvas.width,infoCanvas.height);
+	initializeInfoBar();
 	
 	gameCanvas = document.getElementById("gameCanvas");
 	gameContext = gameCanvas.getContext("2d");
@@ -41,7 +36,6 @@ function startGame(selectLevel) {
 	gameCanvas.addEventListener("mousedown", tapBug, false);
 
 	// Start timer
-	//document.getElementById("time").innerHTML = time;
 	timer = setInterval(displayTime, 1000);
 
 	// Put 5 foods
@@ -52,14 +46,6 @@ function startGame(selectLevel) {
 	createBug();
 }
 
-function pause() {
-	isPaused = !isPaused;
-	if (isPaused){
-		clearInterval(timer);	
-	} else {
-		timer = setInterval(displayTime, 1000);
-	}
-}
 
 function tapBug(event) {
 	if (isPaused)
@@ -79,6 +65,7 @@ function tapBug(event) {
 			} else {
 				score2 += bugs[i].getScore();
 			}
+			updateScore();
 		}
    }
 }
@@ -86,7 +73,7 @@ function tapBug(event) {
 
 function displayTime() {
 	time--;
-	document.getElementById("time").innerHTML = time;
+	updateTime();
 	if (time == 0) {
 		gameOver();
 	}
