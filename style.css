@@ -1,14 +1,35 @@
+#startPage {
+	position: absolute;
+	top: 40%;
+	left: 45%;
+	text-align: center;
+}
+
 .canvas {
 	border: 1px solid #acacac;
 	margin: 0 auto;
 	display: block;
 }
 
+.container {
+	margin-bottom: 10px;
+	text-align: left;
+}
+
+.title {
+	display: inline-block;
+}
+
 .button-group {
+	display: inline-block;
 }
 
 .level-button {
 	width:	30px;
+	margin: 0 auto;
+}
+
+.start-button {
 	margin: 0 auto;
 }
 

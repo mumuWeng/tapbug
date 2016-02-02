@@ -8,13 +8,17 @@
 	</head>
 	<body>
 		<div id="startPage">
-			<span>Level: </span>
-			<div class="button-group">
-				<input type="radio" name="level" id="level1" value="1" class="level-button">1<br/>
-				<input type="radio" name="level" id="level2" value="2" class="level-button">2
+			<div class="container">
+				<div class="title">Level: </div>
+				<div class="button-group">
+					<input type="radio" name="level" id="level1" value="1" class="level-button">1
+					<input type="radio" name="level" id="level2" value="2" class="level-button">2
+				</div>
 			</div>
-			<span>High Score</span>
-			<button onclick="showGamePage()">Start</button>
+			<div class="container">
+				<span>High Score:</span>
+			</div>
+			<button class="start-button" onclick="showGamePage()">Start</button>
 		</div>
 		<div id="gamePage" style="display: none;">
 			<h3 id="levelTitle"></h3>
