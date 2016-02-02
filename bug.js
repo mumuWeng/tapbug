@@ -1,5 +1,4 @@
 function drawbug(x,y, color) {
-
 	alpha = ".6";
 
 	context.beginPath();
@@ -66,6 +65,4 @@ function drawbug(x,y, color) {
     context.beginPath();
     context.arc(x+6, y+7.5, 2.5, 0, Math.PI, false);
     context.stroke();
-
-    context.rotate(20*Math.PI/180);
 }

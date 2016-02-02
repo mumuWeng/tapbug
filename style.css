@@ -4,6 +4,14 @@
 	display: block;
 }
 
+.button-group {
+}
+
+.level-button {
+	width:	30px;
+	margin: 0 auto;
+}
+
 h3 {
 	text-align: center;
 }

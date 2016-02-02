@@ -7,14 +7,18 @@
 
 	</head>
 	<body>
-		<div>
-			<button onclick="showPage1()">page1</button>
-			<button onclick="showPage2()">Page2</button>
-			<hr>
+		<div id="startPage">
+			<span>Level: </span>
+			<div class="button-group">
+				<input type="radio" name="level" id="level1" value="1" class="level-button">1<br/>
+				<input type="radio" name="level" id="level2" value="2" class="level-button">2
+			</div>
+			<span>High Score</span>
+			<button onclick="showGamePage()">Start</button>
 		</div>
-		<div>
-			<h3 id="level1">Page1</h3>
-			<h3 id="level2" style="display:none;">Page2</h3>
+		<div id="gamePage" style="display: none;">
+			<h3 id="level1">Level 1</h3>
+			<h3 id="level2">Level 2</h3>
 			<canvas id="canvas" class="canvas"></canvas>
 		</div>
 		<script src="canvas.js"></script>
