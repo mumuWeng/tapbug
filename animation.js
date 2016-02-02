@@ -4,23 +4,26 @@ var bugSizeR = 15;
 var foodSize = 25;
 var level;
 var isPaused;
-var isFinished;
 var time;
 var score1;
 var score2;
-var foods = [];
+var foods;
 var bugs;
 var timer;
+var createBugTimeout;
 
 function startGame(selectLevel) {
 	level = selectLevel;
 	isPaused = false;
-	isFinished = false;
-	time = 60;
-	score1 = 0;
-	score2 = 0;
+	time = 5;
 	bugs = [];
+	foods = [];
+	if (level == 1) {
+		score1 = 0;
+		score2 = 0;
+	}
 
+	document.getElementById("levelTitle").innerText= "Level " + level;
 	gameCanvas = document.getElementById("gameCanvas");
 	gameContext = gameCanvas.getContext("2d");
 
@@ -65,13 +68,19 @@ function displayTime() {
 	time--;
 	document.getElementById("time").innerHTML = time;
 	if (time == 0) {
-
+		clearGame();
+		if (level == 2) {
+			alert("Level 1 score: " + score1 + "\nLevel 2 score: " + score2);
+			showStartPage();
+		} else {
+			startGame(2);	
+		}
 	}
 }
 
 
 function createBug() {
-	setTimeout(function() {
+	createBugTimeout = setTimeout(function() {
 		var xPosition = parseInt(350*Math.random() + 25) //10~380 with bug's radius 15
 		var color = Math.random();
 
@@ -144,7 +153,9 @@ var Bug = function (initialX, color) {
 					}
 				}
 				if (noFood) {
-					gameOver();
+					clearGame();
+					alert("Level 1 score: " + score1 + "\nLevel 2 score: " + score2);
+					showStartPage();
 				}
 			}
 		}
@@ -209,9 +220,9 @@ var Food = function () {
 
 
 	this.removeFood = function() {
-		gameContext.save();
+		//gameContext.save();
 		gameContext.clearRect(this.x-foodSize, this.y-foodSize, foodSize*2, foodSize*2);
-		gameContext.restore();
+		//gameContext.restore();
 	}
 
 	this.isHit = function(x, y) {
@@ -220,21 +231,11 @@ var Food = function () {
 }
 
 
-function gameOver() {
-	var msg;
+function clearGame() {
+	clearTimeout(createBugTimeout);
+	clearInterval(timer);
 	for (var i = 0; i < bugs.length; i++) {
 		bugs[i].removeBug();
 	}
-	clearInterval(timer);
-
-	if (level == 1) {
-		msg = "Level 1 score: " + score1;
-		alert(msg)
-		showPage2();
-	}
-	else if (level == 2) {
-		msg = "Level 2 score: " + score2;
-		alert(msg);
-		showStartPage();
-	}
+	gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 }
