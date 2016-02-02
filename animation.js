@@ -12,8 +12,8 @@ var foods = [];
 var bugs;
 var timer;
 
-function startGame() {
-	level = 2;
+function startGame(selectLevel) {
+	level = selectLevel;
 	isPaused = false;
 	isFinished = false;
 	time = 60;
@@ -221,11 +221,20 @@ var Food = function () {
 
 
 function gameOver() {
+	var msg;
 	for (var i = 0; i < bugs.length; i++) {
 		bugs[i].removeBug();
 	}
 	clearInterval(timer);
 
-	var msg = "Level 1 score: " + score1 + "\nLevel 2 score: " + score2;
-	alert(msg);
+	if (level == 1) {
+		msg = "Level 1 score: " + score1;
+		alert(msg)
+		showPage2();
+	}
+	else if (level == 2) {
+		msg = "Level 2 score: " + score2;
+		alert(msg);
+		showStartPage();
+	}
 }
