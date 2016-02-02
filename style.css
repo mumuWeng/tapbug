@@ -33,6 +33,16 @@
 	margin: 0 auto;
 }
 
+.info-bar {
+	width: 400px;
+	margin: 0 auto;
+}
+
+.info {
+	width: 32%;
+	display: inline-block;
+}
+
 h3 {
 	text-align: center;
 }

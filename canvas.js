@@ -10,5 +10,5 @@ function getPosition(event) {
 	var x = event.offsetX;
 	var y = event.offsetY;
 
-	drawbug(x,y, "#FFA500");
+	drawbug(x,y, "#FFA500")
 }

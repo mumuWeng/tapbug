@@ -11,7 +11,7 @@
 			<div class="container">
 				<div class="title">Level: </div>
 				<div class="button-group">
-					<input type="radio" name="level" id="level1" value="1" class="level-button">1
+					<input type="radio" name="level" id="level1" value="1" class="level-button" checked="checked">1
 					<input type="radio" name="level" id="level2" value="2" class="level-button">2
 				</div>
 			</div>
@@ -22,6 +22,11 @@
 		</div>
 		<div id="gamePage" style="display: none;">
 			<h3 id="levelTitle"></h3>
+			<div class="info-bar">
+				<div class="info" id="timer">Timer</div>
+				<div class="info" id="pause">Pause</div>
+				<div class="info" id="scoreDisplay">Score</div>
+			</div>
 			<canvas id="canvas" class="canvas"></canvas>
 		</div>
 		<script src="canvas.js"></script>

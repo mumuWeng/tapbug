@@ -6,8 +6,8 @@ function drawbug(x,y, color) {
     context.lineWidth = 1;
     context.strokeStyle = "#000000";
 	context.moveTo(x,y);
-	context.lineTo(x+3, y+3.5);
-    context.moveTo(x+9, y+3.5);
+	context.lineTo(x+3, y+2.5);
+    context.moveTo(x+9, y+2.5);
     context.lineTo(x+12, y);
 
     context.moveTo(x, y+16);
@@ -24,17 +24,17 @@ function drawbug(x,y, color) {
     context.lineTo(x+16, y+20);
     context.lineTo(x+18, y+22);
 
-    context.moveTo(x+1, y+26);
+    context.moveTo(x+1, y+24);
+    context.lineTo(x-1, y+26);
     context.lineTo(x-1, y+28);
-    context.lineTo(x-1, y+31);
-    context.moveTo(x+11, y+26);
+    context.moveTo(x+11, y+24);
+    context.lineTo(x+13, y+26);
     context.lineTo(x+13, y+28);
-    context.lineTo(x+13, y+31);
 
 
     context.moveTo(x,y);
     context.lineTo(x, y+2);
-    context.lineTo(x+1.5, y+1.5);
+    context.lineTo(x+1, y+1.5);
     context.lineTo(x, y);
     context.moveTo(x+12, y);
     context.lineTo(x+12, y+2);
@@ -47,9 +47,9 @@ function drawbug(x,y, color) {
     context.beginPath();
     context.arc(x+6, y+8, 5, 0, 2*Math.PI);
     context.moveTo(x+6, y+12);
-    context.bezierCurveTo(x-5, y+12, x-5, y+27, x+6.5, y+27);
+    context.bezierCurveTo(x-5, y+13, x-5, y+25, x+6.5, y+25);
     context.moveTo(x+6, y+12);	
-    context.bezierCurveTo(x+17, y+12, x+17, y+27, x+6.5, y+27);
+    context.bezierCurveTo(x+17, y+13, x+17, y+25, x+6.5, y+25);
     context.fillStyle = color;
     context.lineWidth = 1;
     context.strokeStyle = "#666666";
