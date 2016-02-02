@@ -29,6 +29,7 @@ function startGame(selectLevel) {
 
 	gameCanvas.width = 400;
 	gameCanvas.height = 600;
+	gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
 	gameCanvas.addEventListener("mousedown", tapBug, false);
 
@@ -40,7 +41,7 @@ function startGame(selectLevel) {
 	for (var i = 0; i < 5; i++) {
 		foods[i] = new Food();
 	}
-
+	
 	createBug();
 }
 
@@ -50,10 +51,11 @@ function tapBug(event) {
     var y = event.offsetY;
 
 	for (var i = 0; i < bugs.length; i++) {
-		if ((bugs[i] != null) &&
+		if ((bugs[i].exist) &&
 			Math.sqrt(Math.pow(bugs[i].getX() - x, 2) + Math.pow(bugs[i].getY() - y, 2))
 			< 30 - bugSizeR) {
-			bugs[i].removeBug();
+			bugs[i].killBug();
+			bugs[i].exist = false;
 			if (level == 1) {
 				score1 += bugs[i].getScore();
 			} else {
@@ -104,6 +106,8 @@ var Bug = function (initialX, color) {
 	var y = 0;
 	var score;
 	var speed;
+	this.exist = true;
+	var removed = false;
 
 	if (color == "black") {
 		score = 5;
@@ -119,9 +123,9 @@ var Bug = function (initialX, color) {
 	var moveInterval = setInterval(move, speed);
 	
 	function move() {
-		//gameContext.save();
+		gameContext.save();
 		clearArc(x, y);
-		//gameContext.restore();
+		
 
 		// move bug
 		var closestFood = findClosestFood(x, y);
@@ -139,7 +143,8 @@ var Bug = function (initialX, color) {
 					y--;
 				}
 			}
-			drawBug(x, y, color);
+			drawBug(x, y, color, 1);
+			gameContext.restore();
 
 			if (closestFood.isHit(x, y)) {
 				closestFood.exist = false;
@@ -163,7 +168,24 @@ var Bug = function (initialX, color) {
 
 	this.removeBug = function() {
 		clearInterval(moveInterval);
+		removed = true;
 		clearArc(x, y);
+	}
+
+	this.killBug = function() {
+		clearInterval(moveInterval);
+		var alpha = 1;
+		fadeOut();
+		function fadeOut () {
+			setTimeout(function() {
+				alpha -= 0.05;
+				clearArc(x, y);
+				if (!removed && alpha >= 0) {
+					drawBug(x, y, color, alpha);
+					fadeOut();
+				}
+			}, 100);
+		}
 	}
 
 	this.getScore = function() { return score; }
@@ -173,6 +195,7 @@ var Bug = function (initialX, color) {
 
 
 function clearArc(x, y) {
+	gameContext.globalAlpha = 1;
 	gameContext.beginPath();
 	gameContext.arc(x, y, bugSizeR+1, 0, 2*Math.PI);
 	gameContext.fillStyle = "white";

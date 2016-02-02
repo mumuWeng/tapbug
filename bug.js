@@ -1,7 +1,8 @@
-function drawBug(x,y, color) {
-	alpha = ".6";
+function drawBug(x,y, color, alpha) {
     x = x - 6.3;
     y = y - 14;
+
+    gameContext.globalAlpha = alpha;
 
 	gameContext.beginPath();
     gameContext.lineWidth = 1;
