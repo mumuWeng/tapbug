@@ -1,8 +1,5 @@
-var infoCanvas;
-var infoContext;
 var gameCanvas;
 var gameContext;
-
 var bugSizeR = 15;
 var foodSize = 25;
 var level;
@@ -15,17 +12,7 @@ var foods = [];
 var bugs;
 var timer;
 
-function pageLoad() {
-	//infoCanvas = document.getElementById("infoCanvas");
-	//infoContext = infoCanvas.getContext("2d");
-
-
-
-	startGame();
-}
-
 function startGame() {
-
 	level = 2;
 	isPaused = false;
 	isFinished = false;
@@ -36,6 +23,9 @@ function startGame() {
 
 	gameCanvas = document.getElementById("gameCanvas");
 	gameContext = gameCanvas.getContext("2d");
+
+	gameCanvas.width = 400;
+	gameCanvas.height = 600;
 
 	gameCanvas.addEventListener("mousedown", tapBug, false);
 
@@ -50,6 +40,7 @@ function startGame() {
 
 	createBug();
 }
+
 
 function tapBug(event) {
 	var x = event.offsetX;
@@ -77,6 +68,7 @@ function displayTime() {
 
 	}
 }
+
 
 function createBug() {
 	setTimeout(function() {
@@ -116,6 +108,7 @@ var Bug = function (initialX, color) {
 	}
 
 	var moveInterval = setInterval(move, speed);
+	
 	function move() {
 		//gameContext.save();
 		clearArc(x, y);
@@ -123,42 +116,38 @@ var Bug = function (initialX, color) {
 
 		// move bug
 		var closestFood = findClosestFood(x, y);
-		if (closestFood == null) {
-		}
-
-		if (Math.abs((closestFood.x - x)) > Math.abs((closestFood.y - y))) {
-			if (closestFood.x > x) {
-				x++;
+		if (closestFood) {
+			if (Math.abs((closestFood.x - x)) > Math.abs((closestFood.y - y))) {
+				if (closestFood.x > x) {
+					x++;
+				} else {
+					x--;
+				}
 			} else {
-				x--;
-			}
-		} else {
-			if (closestFood.y > y) {
-				y++;
-			} else {
-				y--;
-			}
-		}
-
-		drawBug(x, y, color);
-
-		if (closestFood.isHit(x, y)) {
-			closestFood.exist = false;
-			closestFood.removeFood();
-
-			var noFood = true;
-			for (var i = 0; i < foods.length; i ++) {
-				if (foods[i].exist) {
-					noFood = false;
-					break;
+				if (closestFood.y > y) {
+					y++;
+				} else {
+					y--;
 				}
 			}
+			drawBug(x, y, color);
 
-			if (noFood) {
-				gameOver();
+			if (closestFood.isHit(x, y)) {
+				closestFood.exist = false;
+				closestFood.removeFood();
+
+				var noFood = true;
+				for (var i = 0; i < foods.length; i ++) {
+					if (foods[i].exist) {
+						noFood = false;
+						break;
+					}
+				}
+				if (noFood) {
+					gameOver();
+				}
 			}
 		}
-	
 	}
 
 	this.removeBug = function() {
@@ -170,6 +159,7 @@ var Bug = function (initialX, color) {
 	this.getX = function() { return x; }
 	this.getY = function() { return y; }
 }
+
 
 function clearArc(x, y) {
 	gameContext.beginPath();
@@ -197,7 +187,6 @@ function findClosestFood(x, y) {
 
 
 var Food = function () {
-
 	// check wether this Food overlaps with other Foods
 	var overlap = true;
 	while(overlap) {
@@ -240,30 +229,3 @@ function gameOver() {
 	var msg = "Level 1 score: " + score1 + "\nLevel 2 score: " + score2;
 	alert(msg);
 }
-
-
-
-
-
-
-
-
-
-function drawBug(x, y, color) {
-	gameContext.beginPath();
-	gameContext.arc(x, y, bugSizeR, 0, 2*Math.PI);
-	//gameContext.stroke();
-    gameContext.fillStyle = color;
-    gameContext.fill();
-}
-
-
-
-window.onload = pageLoad;
-
-
-
-
-
-
-
