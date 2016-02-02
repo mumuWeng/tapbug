@@ -15,7 +15,7 @@ var createBugTimeout;
 function startGame(selectLevel) {
 	level = selectLevel;
 	isPaused = false;
-	time = 5;
+	time = 10;
 	bugs = [];
 	foods = [];
 	if (level == 1) {
@@ -68,13 +68,7 @@ function displayTime() {
 	time--;
 	document.getElementById("time").innerHTML = time;
 	if (time == 0) {
-		clearGame();
-		if (level == 2) {
-			alert("Level 1 score: " + score1 + "\nLevel 2 score: " + score2);
-			showStartPage();
-		} else {
-			startGame(2);	
-		}
+		gameOver();
 	}
 }
 
@@ -126,7 +120,7 @@ var Bug = function (initialX, color) {
 		// move bug
 		var closestFood = findClosestFood(x, y);
 		if (closestFood) {
-			if (Math.abs((closestFood.x - x)) > Math.abs((closestFood.y - y))) {
+			if (Math.abs(closestFood.x - x) > Math.abs((closestFood.y - y))) {
 				if (closestFood.x > x) {
 					x++;
 				} else {
@@ -139,6 +133,7 @@ var Bug = function (initialX, color) {
 					y--;
 				}
 			}
+
 			drawBug(x, y, color);
 
 			if (closestFood.isHit(x, y)) {
@@ -153,9 +148,7 @@ var Bug = function (initialX, color) {
 					}
 				}
 				if (noFood) {
-					clearGame();
-					alert("Level 1 score: " + score1 + "\nLevel 2 score: " + score2);
-					showStartPage();
+					gameOver();
 				}
 			}
 		}
@@ -238,4 +231,16 @@ function clearGame() {
 		bugs[i].removeBug();
 	}
 	gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+}
+
+
+function gameOver() {
+	clearGame();
+
+	if (level == 2) {
+		alert("Level 1 score: " + score1 + "\nLevel 2 score: " + score2);
+		showStartPage();
+	} else {
+		startGame(2);	
+	}
 }
