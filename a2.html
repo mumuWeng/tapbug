@@ -7,19 +7,18 @@
 		<script src="infoBar.js" type="text/javascript"></script>
 		<script src="app.js" type="text/javascript"></script>
 		<script src="bug.js" type="text/javascript"></script>
-
 	</head>
 	<body>
 		<div id="startPage">
 			<div class="container">
 				<div class="title">Level: </div>
 				<div class="button-group">
-					<input type="radio" name="level" id="level1" value="1" class="level-button" checked="checked">1
-					<input type="radio" name="level" id="level2" value="2" class="level-button">2
+					<input type="radio" name="level" id="level1" value="1" class="level-button" checked="checked" onclick="highestScore(1)">1
+					<input type="radio" name="level" id="level2" value="2" class="level-button" onclick="highestScore(2)">2
 				</div>
 			</div>
 			<div class="container">
-				<span>High Score:</span>
+				High Score: <span id="highScore"></span>
 			</div>
 			<button class="start-button" onclick="showGamePage()">Start</button>
 		</div>
@@ -29,7 +28,9 @@
 		</div>
 		<!-- image from http://www.randomactsofpizza.com/images/pizza-b.png -->
 		<img id="food" src="pizza.jpg" style="display: none;">
-
+		<script>
+			window.onload = showStartPage();
+		</script>
 		
 	</body>
 </html>

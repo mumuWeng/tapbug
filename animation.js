@@ -270,6 +270,7 @@ function gameOver() {
 	clearGame();
 	if (level == 2) {
 		alert("Level 1 score: " + score1 + "\nLevel 2 score: " + score2);
+		storeScore(score1, score2);
 		showStartPage();
 	} else {
 		startGame(2);	
