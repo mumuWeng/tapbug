@@ -289,6 +289,7 @@ function gameOver(noFood) {
 	clearGame();
 	if (level == 2 || noFood) {
 		alert("Level 1 score: " + score1 + "\nLevel 2 score: " + score2);
+		storeScore(score1, score2);
 		showStartPage();
 	} else {
 		startGame(2);	
