@@ -75,7 +75,7 @@ function displayTime() {
 	time--;
 	updateTime();
 	if (time == 0) {
-		gameOver();
+		gameOver(false);
 	}
 }
 
@@ -121,7 +121,9 @@ var Bug = function (initialX, color) {
 	}
 
 	var moveInterval = setInterval(move, speed);
-	
+	var prevFood = null;
+	var ratioCount = 0;
+
 	function move() {
 		if (isPaused)
 			return;
@@ -132,19 +134,36 @@ var Bug = function (initialX, color) {
 		// move bug
 		var closestFood = findClosestFood(x, y);
 		if (closestFood) {
-			if (Math.abs(closestFood.x - x) > Math.abs((closestFood.y - y))) {
+			var xDistance = Math.abs(closestFood.x - x);
+			var yDistance = Math.abs(closestFood.y - y);
+
+			if (xDistance == 0  || yDistance == 0) {
+				ratioCount = 1;
+			} else if ((prevFood != closestFood) || ratioCount < 0) {
+				if (xDistance > yDistance) {
+					ratioCount = parseInt(xDistance / yDistance);
+				} else {
+					ratioCount = parseInt(yDistance / xDistance);
+				}
+			}
+			prevFood = closestFood;
+
+			if ((xDistance > yDistance && ratioCount != 0) || (xDistance < yDistance && ratioCount == 0)) {
 				if (closestFood.x > x) {
 					x++;
 				} else {
 					x--;
 				}
+				ratioCount--;				
 			} else {
 				if (closestFood.y > y) {
 					y++;
 				} else {
 					y--;
 				}
+				ratioCount--;
 			}
+
 			drawBug(x, y, color, 1);
 			gameContext.restore();
 
@@ -160,7 +179,7 @@ var Bug = function (initialX, color) {
 					}
 				}
 				if (noFood) {
-					gameOver();
+					gameOver(true);
 				}
 			}
 		}
@@ -266,9 +285,9 @@ function clearGame() {
 }
 
 
-function gameOver() {
+function gameOver(noFood) {
 	clearGame();
-	if (level == 2) {
+	if (level == 2 || noFood) {
 		alert("Level 1 score: " + score1 + "\nLevel 2 score: " + score2);
 		showStartPage();
 	} else {
