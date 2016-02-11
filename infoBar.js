@@ -7,21 +7,25 @@ function initializeInfoBar() {
 	infoContext.fillRect(0,0,infoCanvas.width,infoCanvas.height);
 	infoCanvas.addEventListener("mousedown", pause, false);
 
+	// pause or play button
 	infoContext.font = "30px Comic Sans MS";
 	infoContext.fillStyle = "white";
 	infoContext.fillText("||", 185, 35); 
 
+	// level
 	infoContext.font = "15px Comic Sans MS";
 	infoContext.fillStyle = "white";
 	infoContext.fillText("Level " + level, 5, 15);
 
+	// time
 	infoContext.font = "15px Comic Sans MS";
 	infoContext.fillStyle = "white";
 	infoContext.fillText("Time: " + time + "s", 5, 45);
 
+	// score
 	infoContext.font = "15px Comic Sans MS";
 	infoContext.fillStyle = "white";
-	infoContext.fillText("Score: 0", 320, 30);
+	infoContext.fillText("Score: 0", 310, 30);
 }
 
 function pause() {
@@ -60,9 +64,9 @@ function updateScore() {
 	}
 
 	infoContext.fillStyle = "#0A2A0A";
-	infoContext.fillRect(300,0,100,50);
+	infoContext.fillRect(310,0,90,50);
 
 	infoContext.font = "15px Comic Sans MS";
 	infoContext.fillStyle = "white";
-	infoContext.fillText("Score: " + score, 320, 30);
+	infoContext.fillText("Score: " + score, 310, 30);
 }
