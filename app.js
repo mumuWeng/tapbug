@@ -48,3 +48,5 @@ function displayScore(level) {
 		document.getElementById("highScore").innerText = 0;
 	}
 }
+
+window.onload = showStartPage;

@@ -4,8 +4,10 @@ var infoCanvas;
 var infoContext;
 var bugSizeR = 15;
 var foodSize = 25;
+var moveUnit = 2;
 var level;
 var isPaused;
+var isFinished;
 var time;
 var score1;
 var score2;
@@ -17,6 +19,7 @@ var createBugTimeout;
 function startGame(selectLevel) {
 	level = selectLevel;
 	isPaused = false;
+	isFinished = false;
 	time = 60;
 	bugs = [];
 	foods = [];
@@ -55,11 +58,10 @@ function tapBug(event) {
     var y = event.offsetY;
 
 	for (var i = 0; i < bugs.length; i++) {
-		if ((bugs[i].exist) &&
+		if ((bugs[i].getExist()) &&
 			Math.sqrt(Math.pow(bugs[i].getX() - x, 2) + Math.pow(bugs[i].getY() - y, 2))
-			< 30 - bugSizeR) {
+			< 30 + bugSizeR) {
 			bugs[i].killBug();
-			bugs[i].exist = false;
 			if (level == 1) {
 				score1 += bugs[i].getScore();
 			} else {
@@ -86,52 +88,60 @@ function createBug() {
 			var xPosition = parseInt(350*Math.random() + 25) //10~380 with bug's radius 15
 			var color = Math.random();
 
-			if (color < 0.3) { //30%
-				color = "black";
-			} else if (color < 0.6) { //30%
-				color = "red";
-			} else { //40%
+			if (color < 0.4) { //40%
 				color = "orange";
+			} else if (color < 0.7) { //30%
+				color = "red";
+			} else { //30%
+				color = "black";
 			}
 
 			var bug = new Bug(xPosition, color);
 			bugs.push(bug);
 		}
 		createBug();
-	}, (2*Math.random() + 1) * 1000); // 1s ~ 3s
+	}, (2*Math.random() + 1) * 1000); // 1s ~ 3s      (2*Math.random() + 1) * 1000
 }
 
 var Bug = function (initialX, color) {
 	var x = initialX;
 	var y = 0;
+	this.color = color;
 	var score;
 	var speed;
-	this.exist = true; // alive. moving around
-	var removed = false; // completely removed. Fading out is not removed.
+	var exist = true; // alive. moving around
+	var removed = false; // completely removed. removed = false if bug is fading out
+	var moveInterval;
+	var moveawayFlag = true; // can move away iff this flag is true. race condition.
+	var moveawayTimeout;
 
 	if (color == "black") {
 		score = 5;
-		speed = (level == 1) ? 7 : 5; //ms per 1px move
+		speed = moveUnit * ((level == 1) ? 7 : 5); //ms per 1px move
 	} else if (color == "red") {
 		score = 3;
-		speed = (level == 1) ? 14 : 10;
+		speed = moveUnit * ((level == 1) ? 14 : 10);
 	} else {
 		score = 1;
-		speed = (level == 1) ? 17 : 12;
+		speed = moveUnit * ((level == 1) ? 17 : 12);
 	}
 
-	var moveInterval = setInterval(move, speed);
+	moveInterval = setInterval(move, speed);
 	var prevFood = null;
 	var ratioCount = 0;
 
+
+	// move bug
 	function move() {
+		if (isFinished || !exist) {
+			clearInterval(moveInterval);
+			clearArc(x, y);
+			return;
+		}
 		if (isPaused)
 			return;
 
-		gameContext.save();
-		clearArc(x, y);
-		
-		// move bug
+		//get next (x, y) location
 		var closestFood = findClosestFood(x, y);
 		if (closestFood) {
 			var xDistance = Math.abs(closestFood.x - x);
@@ -148,24 +158,71 @@ var Bug = function (initialX, color) {
 			}
 			prevFood = closestFood;
 
+			var tempX = x, tempY = y;
 			if ((xDistance > yDistance && ratioCount != 0) || (xDistance < yDistance && ratioCount == 0)) {
 				if (closestFood.x > x) {
-					x++;
+					tempX = x + moveUnit;
 				} else {
-					x--;
+					tempX = x -moveUnit;
 				}
 				ratioCount--;				
 			} else {
 				if (closestFood.y > y) {
-					y++;
+					tempY = y + moveUnit;
 				} else {
-					y--;
+					tempY = y - moveUnit;
 				}
 				ratioCount--;
 			}
 
-			drawBug(x, y, color, 1);
+			// collision detection and avoidance
+			for (var i = 0; i < bugs.length; i++) {
+				if (!bugs[i].getRemoved() && !(bugs[i].getX() == x && bugs[i].getY() == y) &&
+					Math.sqrt(Math.pow(bugs[i].getX() - tempX, 2) + Math.pow(bugs[i].getY() - tempY, 2))
+					< 2 * bugSizeR) {
+
+					//overlap
+					if (!bugs[i].getExist()) {// fading out
+						return;
+					} else if (color == 'black') {
+						if (bugs[i].color == 'black') {
+							if (bugs[i].getX() < tempX) {
+								bugs[i].moveaway(-1);
+							}
+						} else {
+							if (bugs[i].getX() < tempX) {
+								bugs[i].moveaway(-1);	
+							} else {
+								bugs[i].moveaway(1);
+							}
+						}
+					} else if (color == 'red') {
+						if (bugs[i].color == 'red' && bugs[i].getX() < tempX) {
+							bugs[i].moveaway(-1);
+						} else if (bugs[i].color == 'orange') {
+							if (bugs[i].getX() < tempX) {
+								bugs[i].moveaway(-1);	
+							} else {
+								bugs[i].moveaway(1);
+							}
+						}
+					} else {
+						if (bugs[i].color == 'orange' && bugs[i].getX() < tempX) {
+							bugs[i].moveaway(-1);
+						}
+					}
+					ratioCount++;
+					return;
+				}
+			}
+
+			gameContext.save();
+			clearArc(x, y);
+			drawBug(tempX, tempY, color, 1);
 			gameContext.restore();
+
+			x = tempX;
+			y = tempY;
 
 			if (closestFood.isHit(x, y)) {
 				closestFood.exist = false;
@@ -185,13 +242,54 @@ var Bug = function (initialX, color) {
 		}
 	}
 
+
+	this.moveaway = function(direction, force) {
+		if (force == undefined)
+			force = false;
+		if (force) {
+			moveawayFlag = true;
+			clearTimeout(moveawayTimeout);
+		}
+		if (moveawayFlag) {
+			moveawayFlag = false;
+			clearInterval(moveInterval);
+			moveawayTimeout = setTimeout(function() {
+				var tempX = x + (moveUnit * direction);
+
+				// check collision
+				for (var i = 0; i < bugs.length; i++) {
+					if (!bugs[i].getRemoved() && !(bugs[i].getX() == x && bugs[i].getY() == y)  &&
+						Math.sqrt(Math.pow(bugs[i].getX() - tempX, 2) + Math.pow(bugs[i].getY() - y, 2))
+						< 2 * bugSizeR) {
+						if (bugs[i].getExist())
+							bugs[i].moveaway(direction, true);
+						moveawayFlag = true;
+						moveInterval = setInterval(move, speed);
+						return;
+					}
+				}
+
+				gameContext.save();
+				clearArc(x, y);
+				x = tempX;
+				drawBug(x, y, color, 1);
+				gameContext.restore();
+
+				moveInterval = setInterval(move, speed);
+				moveawayFlag = true;
+			}, speed)
+		}
+	}
+
 	this.removeBug = function() {
+		exist = false;
 		clearInterval(moveInterval);
 		removed = true;
 		clearArc(x, y);
 	}
 
 	this.killBug = function() {
+		exist = false;
 		clearInterval(moveInterval);
 		var alpha = 1;
 		fadeOut();
@@ -212,6 +310,8 @@ var Bug = function (initialX, color) {
 	this.getScore = function() { return score; }
 	this.getX = function() { return x; }
 	this.getY = function() { return y; }
+	this.getRemoved = function() { return removed; }
+	this.getExist = function() { return exist; }
 }
 
 
@@ -225,7 +325,7 @@ function clearArc(x, y) {
 
 
 function findClosestFood(x, y) {
-	var closestDistance = 10000000;
+	var closestDistance = Number.POSITIVE_INFINITY;
 	var currDistance;
 	var closestFood = null;
 	for (var i = 0; i < 5; i++) {
@@ -276,6 +376,7 @@ var Food = function () {
 
 
 function clearGame() {
+	isFinished = true;
 	clearTimeout(createBugTimeout);
 	clearInterval(timer);
 	for (var i = 0; i < bugs.length; i++) {
