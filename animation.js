@@ -2,21 +2,22 @@ var gameCanvas;
 var gameContext;
 var infoCanvas;
 var infoContext;
-var bugSizeR = 15;
-var foodSize = 25;
-var moveUnit = 2;
+var bugSizeR = 15; //radius length
+var foodSize = 25; //radius length
+var moveUnit = 2; // pixels per move
 var level;
 var isPaused;
 var isFinished;
 var time;
 var score1;
 var score2;
-var foods;
-var bugs;
+var foods; // array of food
+var bugs; // array of bug
 var timer;
 var createBugTimeout;
 
 function startGame(selectLevel) {
+	// initialize game
 	level = selectLevel;
 	isPaused = false;
 	isFinished = false;
@@ -53,7 +54,7 @@ function startGame(selectLevel) {
 function createBug() {
 	createBugTimeout = setTimeout(function() {
 		if (!isPaused) {
-			var xPosition = parseInt(350*Math.random() + 25) //10~380 with bug's radius 15
+			var xPosition = parseInt((380-2*bugSizeR)*Math.random() + 10 + bugSizeR) //initial bug location: 10~390
 			var color = Math.random();
 
 			if (color < 0.4) { //40%
@@ -68,10 +69,11 @@ function createBug() {
 			bugs.push(bug);
 		}
 		createBug();
-	}, (2*Math.random() + 1) * 1000); // 1s ~ 3s      (2*Math.random() + 1) * 1000
+	}, (2*Math.random() + 1) * 1000); // create a bug every 1s ~ 3s
 }
 
 
+// kill bug within 30px
 function tapBug(event) {
 	if (isPaused)
 		return;
@@ -113,7 +115,7 @@ function displayTime() {
 }
 
 
-function clearGame() {
+function gameOver(noFood) {
 	isFinished = true;
 	clearTimeout(createBugTimeout);
 	clearInterval(timer);
@@ -121,11 +123,6 @@ function clearGame() {
 		bugs[i].removeBug();
 	}
 	gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-}
-
-
-function gameOver(noFood) {
-	clearGame();
 	if (level == 2 || noFood) {
 		alert("Level 1 score: " + score1 + "\nLevel 2 score: " + score2);
 		storeScore(score1, score2);
