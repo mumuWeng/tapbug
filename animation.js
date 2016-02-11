@@ -1,10 +1,11 @@
+var moveUnit = 1; // pixels per move
+
 var gameCanvas;
 var gameContext;
 var infoCanvas;
 var infoContext;
 var bugSizeR = 15; //radius length
 var foodSize = 25; //radius length
-var moveUnit = 2; // pixels per move
 var level;
 var isPaused;
 var isFinished;
@@ -128,6 +129,8 @@ function gameOver(noFood) {
 		storeScore(score1, score2);
 		showStartPage();
 	} else {
-		startGame(2);	
+		setTimeout(function() {
+			startGame(2);
+		}, 700);
 	}
 }

@@ -185,6 +185,7 @@ var Bug = function (initialX, color) {
     this.removeBug = function() {
         exist = false;
         clearInterval(moveInterval);
+        clearTimeout(moveawayTimeout);
         removed = true;
         clearArc(x, y);
     }
@@ -193,13 +194,14 @@ var Bug = function (initialX, color) {
     this.killBug = function() {
         exist = false;
         clearInterval(moveInterval);
+        clearTimeout(moveawayTimeout);
         var alpha = 1;
         fadeOut();
         function fadeOut () {
             setTimeout(function() {
                 alpha -= 0.05;
                 clearArc(x, y);
-                if (!removed && alpha >= 0) {
+                if (!isFinished && !removed && alpha >= 0) {
                     drawBug(x, y, color, alpha);
                     fadeOut();
                 } else {
