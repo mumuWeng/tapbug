@@ -219,7 +219,6 @@ var Bug = function (initialX, color) {
 }
 
 
-
 function drawBug(x,y, color, alpha) {
     x = x - 6.3;
     y = y - 14;

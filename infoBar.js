@@ -52,7 +52,7 @@ function updateTime() {
 
 	infoContext.font = "15px Comic Sans MS";
 	infoContext.fillStyle = "white";
-	infoContext.fillText("Time: " + time + "s", 5, 45);
+	infoContext.fillText("Time: " + time + " s", 5, 45);
 }
 
 function updateScore() {

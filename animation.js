@@ -125,9 +125,8 @@ function gameOver(noFood) {
 	}
 	gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 	if (level == 2 || noFood) {
-		alert("Level 1 score: " + score1 + "\nLevel 2 score: " + score2);
 		storeScore(score1, score2);
-		showStartPage();
+		showDialog(score1, score2);
 	} else {
 		setTimeout(function() {
 			startGame(2);

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>TAP BUG</title>
+		<title>Tap The Bug!</title>
 		<link rel="stylesheet" type="text/css" href="style.css"></link>
 		<script src="animation.js" type="text/javascript"></script>
 		<script src="infoBar.js" type="text/javascript"></script>
@@ -12,14 +12,17 @@
 	<body>
 		<div id="startPage">
 			<div class="container">
-				<div class="title">Level: </div>
+				<div class="title"><strong>Tap The Bug!</strong>
+				</div>
+				<div class="level">Level: 
+				</div>
 				<div class="button-group">
-					<input type="radio" name="level" id="level1" value="1" class="level-button" checked="checked" onclick="highestScore(1)">1
+					<input type="radio" name="level" id="level1" value="1" class="level-button" checked="checked" onclick="highestScore(1)"><span style="margin-right: 20px">1</span>
 					<input type="radio" name="level" id="level2" value="2" class="level-button" onclick="highestScore(2)">2
 				</div>
 			</div>
 			<div class="container">
-				High Score: <span id="highScore"></span>
+				Highest Score: <span id="highScore"></span>
 			</div>
 			<button class="start-button" onclick="showGamePage()">Start</button>
 		</div>
@@ -27,7 +30,17 @@
 			<canvas id="infoCanvas" class="canvas"></canvas>
 			<canvas id="gameCanvas" class="canvas"></canvas>
 		</div>
-		<!-- image from http://www.randomactsofpizza.com/images/pizza-b.png -->
+		<div id="dialog" style="display:none;">
+			<div class="dialog-title">
+				<strong>Game Over!</strong>
+			</div>
+			<div id="final-score">
+			</div>
+			<div class="exit-button-group">
+				<button onclick="showGamePage()" class="restart-button">Restart</button>
+				<button onclick="showStartPage()" class="exit-button">Exit</button>
+			</div>
+		</div>
 		<img id="food" src="pizza.jpg" style="display: none;">
 	</body>
 </html>

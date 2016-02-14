@@ -1,6 +1,7 @@
 function showStartPage () {
 	document.getElementById("startPage").style = "display: block";
 	document.getElementById("gamePage").style = "display: none";
+	document.getElementById("dialog").style = "display: none";
 	if (document.getElementById("level1").checked) {
 		displayScore("level1");
 	} else {
@@ -10,11 +11,16 @@ function showStartPage () {
 
 
 function showGamePage () {
-	document.getElementById("startPage").style= "display: none;";
-	document.getElementById("gamePage").style= "display: block;";
+	document.getElementById("startPage").style = "display: none;";
+	document.getElementById("gamePage").style = "display: block;";
+	document.getElementById("dialog").style = "display: none";
 	startGame(1);
 }
 
+function showDialog (score1, score2) {
+	document.getElementById("dialog").style = "display: block;";
+	document.getElementById("final-score").innerText = "Level 1 score: " + score1 + "\nLevel 2 score: " + score2;
+}
 
 function storeScore(score1, score2) {
 	if (localStorage.hasOwnProperty("level1")) {
